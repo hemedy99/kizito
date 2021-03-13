@@ -1,0 +1,76 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+    <mat-toolbar color="primary"
+      class="text-center mat-elevation-z1 w-100 justify-content-center align-items-center title z-3">
+      <img src="assets/images/smz.png" alt="TeSWS emblem" class="img-logo-title">
+      MaafaPortal
+    </mat-toolbar>
+    <mat-nav-list>
+      <app-sidebar-nav *ngFor="let item of (navItem$ | async)" [item]="item"></app-sidebar-nav>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="mat-elevation-z1 d-flex justify-content-between align-items-center  z-3">
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <div *ngIf="(isHandset$ | async) === (false)"></div>
+      <span class="mr-5">{{pageTitle$ | async}}</span>
+      <div class="d-flex">
+        <!-- <mat-icon class="mr-3" svgIcon="tesws-chat-notification"></mat-icon> -->
+        <div class="mr-3">
+          <button mat-icon-button [matMenuTriggerFor]="menuNotification" aria-label="Example icon-button with a menu">
+            <mat-icon svgIcon="tesws-notification" class="has-notification"></mat-icon>
+          </button>
+          <mat-menu #menuNotification="matMenu" class="mat-menu-notification">
+            <div class="border-bottom mat-menu-notification-title text-primary">Notifications List</div>
+            <button mat-menu-item>
+              <mat-icon svgIcon="tesws-notice-collection"></mat-icon>
+              <span>Notice Notification</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon svgIcon="tesws-declaration-collection"></mat-icon>
+              <span>Declaration Notification</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon svgIcon="tesws-chat-notification"></mat-icon>
+              <span>Other Notification</span>
+            </button>
+          </mat-menu>
+        </div>
+        <div>
+          <button mat-icon-button [matMenuTriggerFor]="menuSetting" aria-label="Example icon-button with a menu">
+            <!-- <mat-icon>more_vert</mat-icon> -->
+            <mat-icon svgIcon="tesws-ellipsis"></mat-icon>
+          </button>
+          <mat-menu #menuSetting="matMenu" xPosition="before">
+            <div class="border-bottom mat-menu-notification-title text-primary">
+              User</div>
+            <button mat-menu-item>
+              <mat-icon svgIcon="tesws-user"></mat-icon>
+              <span>My Profile</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon svgIcon="tesws-password"></mat-icon>
+              <span>Change password</span>
+            </button>
+            <button mat-menu-item >
+              <mat-icon svgIcon="tesws-logout"></mat-icon>
+              <span>Sign out</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+
+    </mat-toolbar>
+    <!-- Add Content Here -->
+    <div class="m-3">
+      <!-- <app-loading></app-loading> -->
+      <!-- <mat-progress-bar mode="indeterminate" *ngIf="(appLoading$ | async)"></mat-progress-bar> -->
+      <router-outlet></router-outlet>
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

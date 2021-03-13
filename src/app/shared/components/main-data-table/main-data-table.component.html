@@ -1,0 +1,343 @@
+<div class="table-cover">
+  <div class="top-area">
+    <!--  <div class="search-area">
+        <mat-form-field *ngIf="tableConfigurations.showSearch">
+          <mat-label>
+            <mat-icon>search</mat-icon>
+            Search
+          </mat-label>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+          <input matInput [(ngModel)]="searchQuery"  class="d-none" (keyup)="applyFilter($event.target.value)" placeholder="Search">
+          <input autocomplete="off" matInput class="d-none" (keyup)="applyFilter($event.target.value)" placeholder="Search">
+        </mat-form-field>
+      </div> -->
+<form [formGroup]="searchForm" *ngIf="tableConfigurations?.showSearch">
+
+  <div class="table-filter">
+    <div class="row">
+
+      <div class="col-md-12 text-right">
+        <mat-form-field class="search-form-field" floatLabel="never">
+          <input  formControlName="searchKey"  autocomplete="off" matInput
+            placeholder="Search" />
+         <!--  <input (keyup)="applyFilter($event.target.value)" formControlName="searchKey" [(ngModel)]="searchKey" autocomplete="off" matInput
+            placeholder="Search" /> -->
+          <button (click)="onSearchClear()" *ngIf="searchKey" arial-label="Clear" mat-button mat-icon-button
+            matSuffix>
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+    </div>
+  </div>
+</form>
+    <!-- end of Filter -->
+
+    <div class="excel-button">
+      <button mat-raised-button (click)="downloadToCsv()" *ngIf="!tableConfigurations.hideExport">
+        <i style="margin-bottom: 5px; color: green" class="fa fa-file-excel-o"></i>
+        Export
+      </button>
+    </div>
+  </div>
+
+  <app-loader @fadeIn *ngIf="loading" message="{{ loadingMessage || 'Please Wait...' }}"></app-loader>
+
+  <table [ngClass]="{'table-bordered': tableConfigurations.showBorder}" mat-table [trackBy]="trackByFn"
+    [dataSource]="dataSource" matSort class="mat-elevation-z2" *ngIf="tableList.length != 0; else noData">
+    <!-- Number Column -->
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> No</th>
+      <td mat-cell *matCellDef="let element;let i = index;"
+        [ngClass]="{'active': tableConfigurations.active[element?.id]}"> {{ i + 1 }}</td>
+    </ng-container>
+
+    <!-- Position Column -->
+    <ng-container *ngFor="let column of tableConfigurations.tableColumns" matColumnDef="{{ column.name }}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ column.label }}</th>
+      <td mat-cell *matCellDef="let element" [ngClass]="{'active': tableConfigurations.active[element?.id]}"
+        style="max-width: 250px">
+        <span *ngIf="column.type == 'number'">
+          {{ element[column?.name] | number }}
+        </span>
+        <span *ngIf="column.type == 'json'">
+          {{ element[column?.name] | json }}
+        </span>
+        <span *ngIf="column.type == 'boolBadge'">
+          <b class="text-success" *ngIf="element[column?.name]">
+            <mat-icon>check_circle_outline</mat-icon>
+          </b>
+          <b class="text-danger" *ngIf="!element[column?.name]">
+            <mat-icon>cancel</mat-icon>
+          </b>
+          <!-- {{ element[column?.name] | json }} -->
+        </span>
+
+
+        <span *ngIf="column.type == 'badgeDanger'">
+          <b class="badge badge-danger"> {{element[column?.name] | number }} </b>
+          <!-- hii italeta issue lkn,ukipitisha value amabyo siyo number italeta error -->
+        </span>
+
+        <!-- for column button -->
+        <span *ngIf="column.type == 'textWithButton'">
+          {{element[column?.name] }}
+          <ng-container *ngIf="element[column?.name]==column.onCondition">
+
+            <br>
+            <button class="btn btn-danger btn-sm" (click)="onColumnBtnCliced(element)">{{ column.btnLabel }}</button>
+          </ng-container>
+        </span>
+        <!-- ./for column button -->
+
+        <span *ngIf="column.type == 'badgeInfo'">
+          <b class="badge badge-info"> {{element[column?.name] | number}} </b>
+        </span>
+        <span *ngIf="column.type == 'badgeWarning'">
+          <b class="badge badge-warning"> {{element[column?.name] | number}} </b>
+        </span>
+        <span *ngIf="column.type == 'badgeSecondary'">
+          <b class="badge badge-secondary"> {{element[column?.name] | number}} </b>
+        </span>
+
+        <span *ngIf="column.type == 'date'">
+          {{ element[column?.name] | date:'mediumDate' }}
+        </span>
+        <span *ngIf="column.type == 'datetime'">
+          {{ element[column?.name] | date:'dd-MM-yyyy HH:mm:ss' }}
+        </span>
+        <span *ngIf="column.type == 'image'">
+          <img [src]="element[column?.name]" style="height: 60px; width: 60px">
+        </span>
+        <span
+          *ngIf="column.type != 'date' && column.type!= 'textWithButton' && column.type!='badgeDanger' && column.type!='badgeSecondary'  && column.type!='badgeInfo' && column.type!='badgeWarning' && column.type != 'number' && column.type != 'image' && column.type != 'json' && column.type != 'datetime' && column.type!='boolBadge'">
+          {{ element[column?.name] }}
+        </span>
+
+      </td>
+    </ng-container>
+
+    <!--Action Icons-->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let tableListItem"
+        [ngClass]="{'active': tableConfigurations.active[tableListItem?.id]}">
+        <div class="float-right" role="group" aria-label="Basic example"
+          *ngIf="tableConfigurations.actionIcons.edit || tableConfigurations.actionIcons.print || tableConfigurations.actionIcons.delete || tableConfigurations.actionIcons.more || tableConfigurations.actionIcons.cancel || tableConfigurations.actionIcons.download || tableConfigurations.actionIcons.customPrimary || actionButtons.length > 0 ">
+
+         <!-- checkif there is condition applied to this button -->
+         <ng-container *ngIf="activeButton('customPrimary',tableListItem)">
+            <button mat-raised-button class="cursor btn-sm mr-2" title="{{tableConfigurations.customPrimaryMessage}}"
+              style="color: white; background-color:#00405d; line-height: 30px; padding: 0px 10px !important; font-size:10px; border-radius: 5px!important;"
+              (click)="customPrimaryItem(tableListItem)"
+              *ngIf="tableConfigurations?.actionIcons?.customPrimary && !showDelete[tableListItem?.id] && (tableListItem | showButton:'customPrimary')">
+              {{tableConfigurations.customPrimaryMessage}}
+            </button>
+          </ng-container>
+          <a @fadeIn class="cursor text-primary action-button mr-1 btn-float" title="print"
+            (click)="printItem(tableListItem?.id)" style="border-radius: 50%"
+            *ngIf="tableConfigurations?.actionIcons?.print && !showDelete[tableListItem?.id]">
+            <mat-icon fontSet="fa" fontIcon="fa-print"></mat-icon>
+            <!--            <i class="fa fa-print"></i>-->
+          </a>
+          <ng-container>
+            <a @fadeIn class="btn btn-sm btn-light action-button mr-1 btn-float" title="view details"
+              (click)="viewItemDetails(tableListItem)" style="border-radius: 50%"
+              *ngIf="tableConfigurations?.actionIcons?.more && !showDelete[tableListItem?.id]  && (tableListItem | showButton:'more')">
+              <mat-icon>list</mat-icon>
+              <!--            <i class="fa fa-list"></i>-->
+            </a>
+          </ng-container>
+          <!-- checkif there is condition applied to this button -->
+          <ng-container *ngIf="activeButton('edit',tableListItem)">
+            <a @fadeIn class="btn btn-sm btn-light action-button mr-1 btn-float" title="edit"
+              (click)="editItem(tableListItem)" style="color: #00405d;"
+              *ngIf="tableConfigurations?.actionIcons?.edit && !showDelete[tableListItem?.id] && (tableListItem | showButton:'edit')">
+              <mat-icon>edit</mat-icon>
+              <!--            <i class="fa fa-pencil"></i>-->
+            </a>
+          </ng-container>
+          <ng-container>
+            <a @fadeIn class="btn btn-sm btn-light action-button mr-1 btn-float" title="Download"
+              (click)="downloadItem(tableListItem)" style="border-radius: 50%"
+              *ngIf="tableConfigurations?.actionIcons?.download && !showDownload[tableListItem?.id] ">
+              <mat-icon fontSet="fa" fontIcon="fa-pencil"></mat-icon>
+              <!--            <i class="fa fa-cloud-download-alt"></i>-->
+            </a>
+          </ng-container>
+
+          <!-- checkif there is condition applied to this button -->
+          <ng-container *ngIf="activeButton('delete',tableListItem)">
+            <a @fadeIn class="btn btn-sm btn-danger action-button  btn-float"
+              (click)="showDelete[tableListItem?.id] = true" style="color: #fff" title="delete"
+              *ngIf="tableConfigurations?.actionIcons?.delete && !showDelete[tableListItem?.id]  && (tableListItem | showButton:'delete')">
+              <!-- <mat-icon fontSet="fa" fontIcon="fa-trash">delete</mat-icon> -->
+              <mat-icon>delete</mat-icon>
+              <!--            <i class="fa fa-trash-o"></i>-->
+            </a>
+          </ng-container>
+          <ng-container>
+            <a @fadeIn mat-raised-button color="" class="bg-success text-white ml-1"
+              (click)="approveItem(tableListItem)" title="Approve"
+              *ngIf="tableConfigurations?.actionIcons?.approve && !showDelete[tableListItem?.id]  && (tableListItem | showButton:'approve')">
+              <!-- <mat-icon fontSet="fa" fontIcon="fa-trash">delete</mat-icon> -->
+              <mat-icon>gavel</mat-icon> Approve
+              <!--            <i class="fa fa-trash-o"></i>-->
+            </a>
+          </ng-container>
+          <ng-container>
+            <a @fadeIn mat-raised-button color="warn" class="ml-1" (click)="rejectItem(tableListItem)" title="Reject"
+              *ngIf="tableConfigurations?.actionIcons?.reject && !showDelete[tableListItem?.id]  && (tableListItem | showButton:'reject')">
+              <!-- <mat-icon fontSet="fa" fontIcon="fa-trash">delete</mat-icon> -->
+              <mat-icon>gavel</mat-icon> Reject
+              <!--            <i class="fa fa-trash-o"></i>-->
+            </a>
+          </ng-container>
+          <!--extra menu items-->
+          <button title="More Actions"
+            *ngIf="actionButtons.length != 0 && (actionButtons | showOtherButtons: tableListItem)" mat-button
+            [matMenuTriggerFor]="menuItem">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menuItem="matMenu">
+            <ng-container *ngFor="let btn of actionButtons">
+              <ng-container>
+                <button mat-menu-item
+                  *ngIf="(tableListItem | showButton: btn.id)" [disabled]="!btn.activeCondition.values.includes(tableListItem[btn.activeCondition.column])"
+                  [title]="btn.title" (click)="submitCustomButtom(btn, tableListItem, 'first')">
+                  <i *ngIf="btn.icon" [className]="btn.icon" ></i>
+                  <img *ngIf="btn.image" [src]="btn.image" style="height: 20px" [alt]="btn.title">
+                  {{btn.label}}
+                </button>
+              </ng-container>
+            </ng-container>
+          </mat-menu>
+
+          <button @fadeIn mat-flat-button (click)="showDelete[tableListItem?.id] = true" title="Cancel"
+            *ngIf="tableConfigurations?.actionIcons?.cancel && !showDelete[tableListItem?.id]">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+          </button>
+
+          <!-- Confirmation message for  button -->
+          <ng-container *ngFor="let btn of actionButtons">
+            <app-loader *ngIf="tableConfigurations.loading && tableConfigurations.loading[btn.id + tableListItem.id]"
+              [message]="btn.loading_message"></app-loader>
+            <p *ngIf="showButtonConfirm[btn.id + tableListItem?.id]">
+              {{btn.confirm_message}}
+            </p>
+            <p *ngIf="showButtonConfirm[btn.id + tableListItem?.id]">
+              <button mat-mini-fab class="cursor" color="warn"
+                *ngIf="!(tableConfigurations.loading && tableConfigurations.loading[btn.id + tableListItem.id])"
+                (click)="submitCustomButtom(btn, tableListItem, 'last')">
+                <mat-icon>done</mat-icon>
+              </button>
+              <button mat-mini-fab class="cursor" color="primary"
+                *ngIf="!(tableConfigurations.loading && tableConfigurations.loading[btn.id + tableListItem.id])"
+                (click)="showButtonConfirm = {}">
+                <mat-icon>clear</mat-icon>
+              </button>
+            </p>
+          </ng-container>
+          <!-- ===================================================== -->
+
+          <!--delete confirmation-->
+          <p @fadeIn *ngIf="showDelete[tableListItem?.id] && !tableConfigurations.deleting[tableListItem?.id]">Are You
+            sure?</p>
+          <p @fadeIn *ngIf="showDelete[tableListItem?.id] && tableConfigurations.deleting[tableListItem?.id]">
+            <span *ngIf="tableConfigurations?.actionIcons?.cancel">Canceling</span>
+            <span *ngIf="tableConfigurations?.actionIcons?.delete">Deleting</span>
+          </p>
+          <p @fadeIn *ngIf="showDelete[tableListItem?.id]">
+            <mat-progress-bar mode="indeterminate" @fadeIn *ngIf="tableConfigurations.deleting[tableListItem?.id]">
+            </mat-progress-bar>
+            <button mat-mini-fab style="color: white; background-color: red; border-radius: 50%!important;" @fadeIn
+              *ngIf="!tableConfigurations.deleting[tableListItem?.id]" (click)="showDelete = {}">
+              <mat-icon>clear</mat-icon>
+            </button>
+            <button mat-mini-fab style="color: white; background-color: green; border-radius: 50%!important;" @fadeIn
+              *ngIf="!tableConfigurations.deleting[tableListItem?.id]" (click)="deleteItem(tableListItem)">
+              <mat-icon>done</mat-icon>
+            </button>
+          </p>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" style='background-color: rgba(0, 0, 0, 0.1); opacity: 0.8;'>
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="routeAnimationsElements" class="card-1">
+    </tr>
+  </table>
+
+  <!--Pagination-->
+  <!-- <mat-paginator [ngClass]="{'hidden': !tableConfigurations.allowPagination}" [pageSizeOptions]="[10, 20, 25, 50, 100]">
+  </mat-paginator> -->
+   <!--Pagination-->
+   <!-- <ng-container *ngIf="!this.tableConfigurations?.backendPagination?.enabled;else backendPagination">
+    <mat-paginator  [pageSize]="10" [ngClass]="{'hidden': !tableConfigurations.allowPagination}" [pageSizeOptions]="[10, 20, 25, 50, 100]">
+    </mat-paginator>
+
+  </ng-container>
+  <ng-template #backendPagination>
+    <mat-paginator [length]="dataSource.pageCount$ | async" [pageSize]="10" [ngClass]="{'hidden': !tableConfigurations.allowPagination}" [pageSizeOptions]="[10, 20, 25, 50, 100]">
+    </mat-paginator>
+
+  </ng-template> -->
+  <!-- <ng-container *ngIf="this.tableConfigurations?.backendPagination?.enabled;else noBackendPagination">
+    
+    <mat-paginator #backendPaginator [length]="dataLength" [pageSize]="this.tableConfigurations?.backendPagination?.pageSize" [ngClass]="{'hidden': !tableConfigurations.allowPagination}" [pageSizeOptions]="[10, 20, 25, 50, 100]">
+    </mat-paginator>
+  </ng-container>
+  <ng-template #noBackendPagination>
+    <mat-paginator  [pageSize]="10" [length]="dataSource.pageCount$ | async"  [ngClass]="{'hidden': !tableConfigurations.allowPagination}" [pageSizeOptions]="[10, 20, 25, 50, 100]">
+    </mat-paginator>
+   
+  </ng-template> -->
+  <!-- [length]="dataSource.pageCount$ | async" [ngClass]="{'hidden': !tableConfigurations.allowPagination}" -->
+  <mat-paginator  [pageSize]="10" [length]="dataSource.pageCount$|async"   [pageSizeOptions]="[10, 20, 25, 50, 100]">
+  </mat-paginator>
+
+
+  <ng-template #noData>
+    <table *ngIf="!loading" [ngClass]="{'table-bordered': tableConfigurations.showBorder}" mat-table
+      [trackBy]="trackByFn" [dataSource]="dataSource" matSort class="mat-elevation-z2">
+
+      <!-- Number Column -->
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> No</th>
+        <td mat-cell *matCellDef="let element;let i = index;"> {{ i + 1 }}</td>
+      </ng-container>
+
+      <!-- Position Column -->
+      <ng-container *ngFor="let column of tableConfigurations.tableColumns" matColumnDef="{{ column.name }}">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ column.label }}</th>
+        <td mat-cell *matCellDef="let element"> {{element[column?.name] }}</td>
+      </ng-container>
+
+      <!--Action Icons-->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let tableListItem">&nbsp;</td>
+      </ng-container>
+
+      <!-- Disclaimer column -->
+      <ng-container matColumnDef="disclaimer">
+        <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+          <h5 class="text-center text-muted pt-1">
+            {{tableConfigurations.empty_msg || "No data"}}
+          </h5>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"
+        style='background-color: rgba(0, 0, 0, 0.1); opacity: 0.8;'></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="routeAnimationsElements" class="card-1">
+      </tr>
+
+      <tr mat-footer-row *matFooterRowDef="['disclaimer']" class="example-second-footer-row"></tr>
+    </table>
+
+  </ng-template>
+</div>

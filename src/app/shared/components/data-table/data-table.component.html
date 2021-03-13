@@ -1,0 +1,113 @@
+<!-- Filter -->
+<div class="table-filter" *ngIf="hasSearch">
+
+  <div class="text-right">
+    <mat-form-field class="search-form-field" floatLabel="never">
+      <input (keyup)="filterTable()" [(ngModel)]="searchKey" autocomplete="off" matInput placeholder="Search" />
+      <button (click)="onSearchClear()" *ngIf="searchKey" arial-label="Clear" mat-button mat-icon-button matSuffix>
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</div>
+<!-- end of Filter -->
+
+<div class="mat-elevation-z1">
+
+  <table mat-table [dataSource]="listData" matSort class="table table-bordered table-hover">
+    <ng-container *ngFor="let tableData of objectKeys(columnHeader); let i = index;">
+      <ng-container *ngIf="i == hasSN">
+        <!-- SN Column -->
+        <ng-container matColumnDef="{{tableData}}">
+          <th mat-header-cell *matHeaderCellDef class="text-center sn"> {{columnHeader[tableData]}}
+          </th>
+          <td mat-cell *matCellDef="let element; let i = index" class="sn">
+            {{i + 1 + myPaginator.pageIndex * myPaginator.pageSize}}
+          </td>
+        </ng-container>
+        <!-- end of SN Column -->
+      </ng-container>
+
+      <ng-container *ngIf="!hasActionsColumn">
+        <ng-container *ngIf="(i > hasSN)">
+          <ng-container matColumnDef="{{tableData}}">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">{{columnHeader[tableData]}}
+            </th>
+            <td mat-cell *matCellDef="let element">{{element[tableData]}}</td>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="hasActionsColumn">
+
+        <ng-container
+          *ngIf="(i > hasSN) && ((i !== (objectKeys(columnHeader).length - actionPosition)) && (i !== (objectKeys(columnHeader).length - actionPosition2)) && (i !== (objectKeys(columnHeader).length - actionPosition3)))">
+          <ng-container matColumnDef="{{tableData}}">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">{{columnHeader[tableData]}}
+            </th>
+            <td mat-cell *matCellDef="let element">{{element[tableData]}}</td>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="i == (objectKeys(columnHeader).length - actionPosition)">
+          <ng-container matColumnDef="{{tableData}}">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">{{columnHeader[tableData]}}
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <ng-container [ngTemplateOutlet]="actions" [ngTemplateOutletContext]="{data : row}"></ng-container>
+            </td>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="i == (objectKeys(columnHeader).length - actionPosition2)">
+          <ng-container matColumnDef="{{tableData}}">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">{{columnHeader[tableData]}}
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <ng-container [ngTemplateOutlet]="actions2" [ngTemplateOutletContext]="{data : row}"></ng-container>
+            </td>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="i == (objectKeys(columnHeader).length - actionPosition3)">
+          <ng-container matColumnDef="{{tableData}}">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">{{columnHeader[tableData]}}
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <ng-container [ngTemplateOutlet]="actions3" [ngTemplateOutletContext]="{data : row}"></ng-container>
+            </td>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
+
+
+    <!-- Table Configurations -->
+    <tr mat-header-row *matHeaderRowDef="objectKeys(columnHeader)"></tr>
+    <tr mat-row *matRowDef="let row; columns: objectKeys(columnHeader);"></tr>
+    <!-- end of Table Configurations -->
+
+    <!-- If No Data Found -->
+    <!-- <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{ hide: !(!listData && listData.data.length == 0) }">
+    </mat-footer-row>
+    <ng-container matColumnDef="noData" class="text-center">
+      <mat-footer-cell *matFooterCellDef [attr.colspan]="objectKeys(columnHeader).length">No Data
+      </mat-footer-cell>
+    </ng-container> -->
+    <!-- end if no Data Found -->
+
+    <!-- Loading Data Message -->
+    <!-- <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{hide: !!listData}"></mat-footer-row>
+    <ng-container matColumnDef="loading">
+      <mat-footer-cell *matFooterCellDef [attr.colspan]="objectKeys(columnHeader).length" class="text-center">
+        <mat-progress-bar class="my-3" mode="indeterminate" *ngIf="listData"></mat-progress-bar>
+      </mat-footer-cell>
+    </ng-container> -->
+    <!-- end of Loading Data Message -->
+
+
+
+  </table>
+  <mat-paginator #myPaginator [length]="totalElements" [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSizeStart"
+    [showFirstLastButtons]="showFirstLastButtons" (page)="paginationEvent($event)">
+  </mat-paginator>
+</div>

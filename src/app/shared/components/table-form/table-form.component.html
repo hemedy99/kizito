@@ -1,0 +1,68 @@
+<!-- <app-page-breadcrumb
+  [title]="title"
+  [subtitle]="subtitle"
+  [icon]="icon"
+  [addbutton]="addbutton"
+  [helpText] = "helpText"
+  [addbuttonurl]="addbuttonurl"
+  *ngIf="!(hideBreadcrumb)">
+</app-page-breadcrumb> -->
+<div [ngClass]="{'accounting-body-wrapper': darkerLayout}">
+  <div class="ks-nav-body-wrapper">
+    <div class="container-fluid "> <!-- p-4 -->
+      <div class="row no-print">
+        <div class="col-md-12">
+          <ng-content select="summary"></ng-content>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div [ngClass]="{'accounting-content-wrapper': lighterBodyLayout}">
+            <div [@tableSize]="viewDetails ? (smallForm ? 'eighty': animationSize) : 'hundred'" class="no-print">
+              <ng-content select="table"></ng-content>
+            </div>
+
+            <div [@formSize]="viewForm ?  (smallForm ? 'twenty': animationSize) : 'zero'">
+              <h5 class="mat-divider-title no-print  mt-1 row pl-3 pr-3">
+
+                <span *ngIf="formTitle"> {{ formTitle }} </span>
+                <span *ngIf="!formTitle && subtitle"> {{ subtitle.replace('/', '') }} </span>&nbsp;
+                <span class="example-fill-remaining-space"></span>
+                <button mat-button title="Close Form" (click)="closeForm()" class="pull-right cursor">
+                  <mat-icon>close</mat-icon> Close
+                </button>
+              </h5>
+              <mat-divider class="no-print"></mat-divider>
+              <p *ngIf="loading">Saving Data...</p>
+              <mat-progress-bar mode="indeterminate" *ngIf="loading">
+              </mat-progress-bar>
+              <mat-card>
+                <ng-content select="form"></ng-content>
+              </mat-card>
+            </div>
+          </div>
+          <!-- /.col-md-12 -->
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<ng-container>
+  <div class="col-md-12" *ngIf="!viewDetails">
+    <a style="z-index: 100" *ngIf="!hideAdd" title="Add" (click)="add()" mat-fab color="primary" class="add-item">
+      <mat-icon>add</mat-icon>
+    </a>
+  </div>
+</ng-container>
+<!-- <ng-container *appHasPermission="addPermission || ''">
+  <div class="col-md-12" *ngIf="!viewDetails">
+    <a style="z-index: 100" *ngIf="!hideAdd" title="Add" (click)="add()" mat-fab color="primary" class="add-item">
+      <mat-icon>add</mat-icon>
+    </a>
+  </div>
+</ng-container> -->
+

@@ -1,0 +1,13 @@
+<h1 mat-dialog-title class="text-danger">
+  {{title}}
+</h1>
+<div mat-dialog-content>
+  <h3>{{message}}</h3>
+</div>
+<hr>
+<div class="d-flex justify-content-between">
+  <button mat-raised-button class="tesws-btn tesws-btn-grey" (click)="onDismiss()"><i class="icofont-close"></i>
+    No</button>
+  <button mat-raised-button class="tesws-btn tesws-btn-primary" color="primary" (click)="onConfirm()"><i
+      class="icofont-check"></i> Yes</button>
+</div>

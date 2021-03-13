@@ -1,0 +1,26 @@
+<mat-card>
+    
+  <h2><i class="icofont-users"></i> User Management 
+    <div class="float-right">
+      <button mat-raised-button class="tesws-btn" (click)="onCreateUser()">
+        <mat-icon>add</mat-icon> Add New User
+      </button>
+    </div>
+  </h2>
+  <mat-progress-bar mode="indeterminate" *ngIf="loading$ | async" class="mt-5"></mat-progress-bar>
+  <app-data-table [columnHeader]="tableColumns" [tableData]="tableData$ | async">
+    <ng-template #actions let-data="data">
+      <div class="d-flex justify-content-center">
+        <button mat-mini-fab class="tesws-svg tesws-svg-grey mr-2" >
+          <mat-icon svgIcon='tesws-eye'></mat-icon>
+        </button>
+        <button mat-mini-fab class="tesws-svg tesws-svg-grey" title="edit">
+     
+          <mat-icon svgIcon='tesws-edit'></mat-icon>
+        </button>
+      </div>
+    </ng-template>
+  </app-data-table>
+  
+
+</mat-card>

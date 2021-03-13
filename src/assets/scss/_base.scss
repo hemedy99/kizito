@@ -1,0 +1,106 @@
+.link {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+  display: inline-block;
+  white-space: nowrap;
+  text-decoration: none;
+  vertical-align: baseline;
+  overflow: visible;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.z-3 {
+  z-index: 3 !important;
+}
+
+.mat-menu-panel.mat-menu-notification {
+  width: 280px !important;
+  position: relative;
+
+  /* &::after {
+
+    content: "⛰";
+    position: absolute;
+    left: 89%;
+    top: 0px;
+    z-index: 1001;
+    font-size: 40px;
+    line-height: 0;
+    color: #fff;
+    text-shadow: 0 -2px 2px rgba(65, 76, 78, 0.12);
+  } */
+}
+
+.mat-menu-notification-title {
+  padding: 0.5rem 0.5rem 0.9rem 1.2rem;
+  font-family: "Open Sans", sans-serif;
+  font-size: 1.1rem;
+}
+
+.legend {
+  position: relative;
+  // border: 1px solid $gray-200;
+  border: 1px solid rgb(226, 226, 226);
+  padding: 1.5rem 1rem 1rem 1rem;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+
+  .legend-title {
+    background-color: inherit;
+    position: absolute;
+    top: -1.2rem;
+    padding: 0.2rem 1rem;
+    background-color: white;
+  }
+
+  .legend-btn {
+    position: absolute;
+    top: -0.9rem;
+    padding: 0.2rem 1rem;
+    right: 25px;
+  }
+
+  .w-10 {
+    width: 10%;
+  }
+
+  .w-20 {
+    width: 20%;
+  }
+
+  .w-50 {
+    width: 50%;
+  }
+
+  .w-60 {
+    width: 60%;
+  }
+
+  .w-70 {
+    width: 70%;
+  }
+
+  .w-80 {
+    width: 80%;
+  }
+
+  .w-90 {
+    width: 90%;
+  }
+}
+.tesws-font-size {
+  .mat-card-subtitle, .mat-card-content {
+    font-size: 1.2rem;
+    .legend .legend-title {
+      top: -1.1rem;
+      font-size: 1.4rem;
+  }
+  }
+}

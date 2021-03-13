@@ -1,0 +1,14 @@
+$border-radius: 0;
+.rounded-top-left-0 {
+  border-top-left-radius: $border-radius !important;
+}
+.rounded-top-right-0 {
+  border-top-right-radius: $border-radius !important;
+
+}
+.rounded-bottom-right-0 {
+  border-bottom-right-radius: $border-radius !important;
+}
+.rounded-bottom-left-0 {
+  border-bottom-left-radius: $border-radius !important;
+}

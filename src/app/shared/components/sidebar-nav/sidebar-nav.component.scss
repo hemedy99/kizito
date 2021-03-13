@@ -1,0 +1,42 @@
+// .sidenav {
+
+// :host {
+//   display: flex;
+//   flex-direction: column;
+//   outline: none;
+//   width: 100%;
+
+.mat-list-item.active {
+  // background-color: mat-color($app-primary, 50);
+  background-color: #E0E0E0;
+}
+
+//   &:hover,
+//   &:focus {
+//     >.mat-list-item:not(.expanded) {
+//       background-color: mat-color($app-primary, 100) !important;
+//     }
+//   }
+// }
+
+.mat-list-base {
+  .mat-list-item {
+    .mat-list-item-content {
+      display: flex;
+      width: 100%;
+    }
+
+    .routeIcon {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+// }
+
+
+
+//setting the size of routeFontIcon
+.routeFontIcon {
+  font-size: 25px;
+}

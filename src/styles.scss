@@ -1,0 +1,85 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+// @import "~bootstrap/dist/css/bootstrap-grid.css";
+@import "./assets/scss/master.scss";
+
+//import iconfonts
+@import "./assets/icofont/icofont.min.css";
+
+// @import "../node_modules/normalize.css/normalize.css";
+// @import "../node_modules/bootstrap/scss/bootstrap-grid.scss";
+// @import "./assets/css/variables";
+// @import "./assets/css/buttons";
+// @import "./assets/css/custom";
+.menu_section {
+  .mat-accordion {
+    .mat-expansion-panel {
+      background: transparent;
+
+      &:first-of-type {
+        border-radius: 0;
+      }
+
+      .mat-expansion-panel-header {
+        padding: 0 0.8rem;
+
+        &-title {
+          color: white;
+          font-size: 0.9rem;
+
+          .fab,
+          .fas {
+            width: 1.2rem;
+          }
+        }
+      }
+
+      a {
+        color: white;
+        padding: 0.5rem 0.2rem;
+        display: block;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+
+html {
+  font-size: 68.75%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.text-center {
+  .mat-sort-header-container {
+    justify-content: center;
+  }
+}
+
+.mat-table.table-bordered {
+  thead {
+
+    th,
+    td {
+      border-bottom: none !important;
+    }
+  }
+}
+
+.mat-table.table-bordered~.mat-paginator {
+  border: 1px solid #dee2e6;
+}
+
+.table-hover tbody tr:hover {
+  color: #212529;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+

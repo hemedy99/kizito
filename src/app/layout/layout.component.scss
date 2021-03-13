@@ -1,0 +1,148 @@
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 300px;
+}
+
+/* .sidenav .mat-toolbar {
+  background: inherit;
+} */
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.img-logo-title {
+  height: 2.5rem;
+  width: auto;
+  margin-right: 1rem;
+}
+
+.title {
+  font-size: 2.0rem;
+}
+
+.z-3 {
+  z-index: 3;
+}
+
+.has-notification {
+  transform-origin: 50% 0px;
+  transform: rotate(0deg);
+  animation-name: animateRing;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  color: black;
+}
+
+$frameLength: 0.8771;
+
+@keyframes animateRing {
+
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+
+  #{$frameLength * 20%} {
+    transform: rotate(0deg);
+  }
+
+  #{$frameLength * 40%} {
+    transform: rotate(-20deg);
+  }
+
+  #{$frameLength * 55%} {
+    transform: rotate(20deg);
+  }
+
+  #{$frameLength * 65%} {
+    transform: rotate(-20deg);
+  }
+
+  #{$frameLength * 74%} {
+    transform: rotate(8deg);
+  }
+
+  #{$frameLength * 85%} {
+    transform: rotate(-15deg);
+  }
+
+  #{$frameLength * 90%} {
+    transform: rotate(-0deg);
+  }
+}
+
+@keyframes animateSlide {
+
+  0%,
+  100% {
+    transform: translateX(-6.5%);
+  }
+
+  #{$frameLength * 20%} {
+    transform: translateX(0%);
+  }
+
+  #{$frameLength * 25%} {
+    transform: translateX(-1%);
+  }
+
+  #{$frameLength * 40%} {
+    transform: translateX(11%);
+  }
+
+  #{$frameLength * 55%} {
+    transform: translateX(-11%);
+  }
+
+  #{$frameLength * 60%} {
+    transform: translateX(0%);
+  }
+
+  #{$frameLength * 68%} {
+    transform: translateX(10%);
+  }
+
+  #{$frameLength * 78%} {
+    transform: translateX(-11%);
+  }
+
+  #{$frameLength * 90%} {
+    transform: translateX(11%);
+  }
+
+  #{$frameLength * 98%} {
+    transform: translateX(-11%);
+  }
+}
+
+@keyframes animateBounce {
+  0% {
+    transform: scale(0);
+  }
+
+  14% {
+    transform: scale(1.15);
+  }
+
+  28% {
+    transform: scale(1);
+  }
+
+  42% {
+    transform: scale(1.15);
+  }
+
+  70% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

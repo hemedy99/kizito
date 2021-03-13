@@ -1,0 +1,100 @@
+<h3>{{data.title}}
+    <button mat-raised-button class="float-right" (click)="onClose()"><i class="icofont-close"></i></button>
+  </h3>
+  <div class="clearfix"></div>
+  <hr>
+  
+  
+  <mat-dialog-content>
+    <form [formGroup]="submitForm">
+        <div class="row">
+            <div class="col">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>UserType</mat-label>
+                    <mat-select formControlName="userTypeId" required>
+                      <mat-option *ngFor="let data of userTypes | async" value="{{data.id}}">{{data.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </div>
+
+            <div class="col">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Working Area</mat-label>
+                    <mat-select formControlName="workingAreaId" required>
+                      <mat-option *ngFor="let data of workingAreas | async" value="{{data.id}}">{{data.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </div>
+
+            <div class="col">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>District</mat-label>
+                    <mat-select formControlName="reporterArea" required>
+                      <mat-option *ngFor="let data of districts | async" value="{{data.id}}">{{data.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </div>
+             
+          </div>
+        
+        <div class="row">
+            <div class="col">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>FirstName</mat-label>
+                    <input formControlName="firstName" matInput placeholder="First Name">
+                  </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>MiddleName</mat-label>
+                    <input formControlName="middleName" matInput placeholder="Middle Name">
+                  </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>LastName</mat-label>
+                    <input formControlName="lastName" matInput placeholder="Last Name">
+                  </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Gender</mat-label>
+                    <mat-select formControlName="gender" required>
+                        <mat-option *ngFor="let data of genders | async" value="{{data.value}}">{{data.label}}
+                        </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Mobile</mat-label>
+                    <input formControlName="phone" matInput placeholder="Mobile No">
+                  </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input formControlName="email" matInput placeholder="Email Address">
+                  </mat-form-field>
+            </div>
+        </div>
+        
+    </form>
+  
+  </mat-dialog-content>
+  
+  <hr>
+
+<div>
+  <button mat-raised-button color="warn" (click)="onClose()" class="mr-3"><i class="icofont-close"></i>
+    Close</button>
+  <button mat-raised-button color="primary" class="float-right" (click)="onSave()"><i class="icofont-save"></i>
+    Save</button>
+</div>
+  
